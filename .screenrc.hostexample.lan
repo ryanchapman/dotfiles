@@ -1,0 +1,12 @@
+# QA - green
+setenv _SCREEN_CAPTION "QA - QA POD"
+setenv _SCREEN_BG "=b GW"
+setenv _SCREEN_FG "=br wK"
+
+screen -t hms	   1 bash
+screen -t hms	   2 bash
+screen -t hms	   3 bash
+#screen -t db01a   4 bash
+
+select 1    # if you have more than one window, you need to tell screen which one to start on
+
