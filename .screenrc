@@ -1,0 +1,142 @@
+#
+# .screenrc - User configurable screen parameters
+#
+# For the meaning of these commands, see the wiki at 
+# http://aperiodic.net/screen/appearance/
+#
+# Ryan Chapman, ryan.chapman@rightnow.com
+# Sat Oct  2 17:52:09 MDT 2010
+
+startup_message off
+vbell on
+vbell_msg "RING!  ---  RING!  ---  RING!"  
+deflogin off      #do not write utmp entry for each window
+defshell -$SHELL  #dash makes it a login shell
+defscrollback 10000
+defutf8 on        #always use UTF-8
+#defflow off       #turn off flow control
+msgwait 5         #display messages for N seconds
+#defbce on         #erase background with curent bg color
+#setenv LC_CTYPE en_us.UTF-8   #probably not needed
+setenv PS1 "\u@\h:\w\$ "
+
+#TODO2 Login off not working
+shelltitle '|hms'  #default title for windows created with C-a,c
+                   #note that "|TITLE" syntax is required.  Only TITLE 
+                   #is displayed
+
+
+### WINDOW MONITORING ###
+defmonitor off      #all windows are not monitored for new activity
+activity "Activity[%c] on %n%f %t"   #msg when activity occurs in other window
+ 
+
+### TERMINAL SETTINGS ###
+altscreen off      #if altscreen is on, then programs like less and vi will
+                   #clear the screen when they exit.  Annoying.
+#termcapinfo xterm ti@:te@  #text in screen will go into the xterm's 
+                           #scrollback buffer
+attrcolor b ".I"  #needed for 256 color terminal
+#attrcolor i "+b"   #WORKAROUND FOR securecrt's inability to display 16 sys clrs
+termcapinfo xterm 'Co#256:AB=\E[48;5;%dm:AF=\E[38;5;%dm'
+#change init sequence to not switch width
+#termcapinfo xterm 'Z0=\E[?3h:Z1=\E[?3l:is=\E[r\E[m\E[2J\E[H\E[?7h\E[?1;4;6l'
+term xterm-256color
+#term xterm-16color 
+defbce "on"       #needed for 256 color terminal?
+
+#TODO Add this to termcapinfo for scrolling in ssh
+#termcapinfo xterm ti@:te@
+
+
+### APPEARANCE ###
+#caption	always	"%{+b yk}LC"
+#echo "TERM=$TERM"   #can be used for debugging. echoes to term before screen starts
+#change X to the color for the POD.  
+#For example, yellow would be x=y U=uppercase(x)=Y
+#caption always "%{+b XU}"  or "%{+b yY}
+# OLD - hardstatus alwayslastline "%?%{wK}%-Lw%?%{+b yY}%n*%f %t%?(%u)%?%?%{wK}%+Lw%?K"
+
+source $HOME/.screenrc.$HOSTNAME
+
+sessionname $HOSTNAME
+
+caption    always  "%{$_SCREEN_BG}$_SCREEN_CAPTION%=%n %t"
+hardstatus alwayslastline "%?%F%{$_SCREEN_FG}%:%{$_SCREEN_FG}%?%?%F%{$_SCREEN_BG}%? %L=%-Lw%45>%{$_SCREEN_BG}%n%f %t%{-}%+Lw%-0<"
+
+sorendition '= kG'	#green on black background
+escape ^Xx		#change escape key from Ctrl-A to Ctrl-!
+
+# Banish screen 0, it sucks {{{
+bind "c" screen 1
+bind "^c" screen 1
+# user must enter 01 .. 40 to select the window
+maptimeout 425    #wait 400ms before executing. 
+				  #gives time for two char win selection. ex: "`18"
+bindkey "`0" mapdefault
+bindkey "`1" mapdefault
+bindkey "`2" mapdefault
+bindkey "`3" mapdefault
+bindkey "`4" mapdefault
+bindkey "`01" select 1
+bindkey "`02" select 2
+bindkey "`03" select 3
+bindkey "`04" select 4
+bindkey "`05" select 5
+bindkey "`06" select 6
+bindkey "`07" select 7
+bindkey "`08" select 8
+bindkey "`09" select 9
+bindkey "`10" select 10
+bindkey "`11" select 11 
+bindkey "`12" select 12 
+bindkey "`13" select 13 
+bindkey "`14" select 14 
+bindkey "`15" select 15 
+bindkey "`16" select 16 
+bindkey "`17" select 17 
+bindkey "`18" select 18 
+bindkey "`19" select 19 
+bindkey "`20" select 20 
+bindkey "`21" select 21 
+bindkey "`22" select 22 
+bindkey "`23" select 23 
+bindkey "`24" select 24 
+bindkey "`25" select 25 
+bindkey "`26" select 26
+bindkey "`27" select 27
+bindkey "`28" select 28 
+bindkey "`29" select 29 
+bindkey "`30" select 30
+bindkey "`31" select 31
+bindkey "`32" select 32
+bindkey "`33" select 33
+bindkey "`34" select 34
+bindkey "`35" select 35
+bindkey "`36" select 36
+bindkey "`37" select 37
+bindkey "`38" select 38
+bindkey "`39" select 39
+bindkey "`40" select 40 
+
+
+bindkey "\033[5D" prev    # ctrl-left to change win left
+bindkey "\033[5C" next    # ctrl-right to change win right
+bindkey "\033[13~" other  # ctrl-` sends this in putty.  it is an unused
+                          # deprecated F1 xterm mapping that we are going to
+                          # use to switch between windows in screen
+
+# Be lazy and use Fx keys for screen switching
+bindkey "OP" select 1    #f1
+bindkey "OQ" select 2    #f2
+bindkey "OR" select 3    #f3
+bindkey "OS" select 4
+bindkey "[15~" select 5
+bindkey "[17~" select 6
+bindkey "[18~" select 7
+bindkey "[19~" select 8
+bindkey "[20~" select 9
+bindkey "[21~" select 10
+bindkey "[23~" select 11
+bindkey "[24~" select 12
+
