@@ -1,0 +1,56 @@
+# Set up env vars
+if [ -d ~rchapman ]; then
+
+	USER=`id -un`
+	if [[ $1 == "root" || $USER == "root" ]]; then
+ 		export HISTFILE=~rchapman/.bash_history.root
+		export USER=root
+	else
+		export HISTFILE=~/.bash_history
+		export USER=rchapman
+	fi
+
+
+	HISTFILESIZE=10000; export HISTFILESIZE
+	HISTIGNORE="l:ll:dir:clear:pwd:exit"; export HISTINGORE
+	HISTTIMEFORMAT='%b %d %H:%M:%S  '; export HISTTIMEFORMAT
+	VIMINIT="source `echo ~rchapman`/.vimrc"; export VIMINIT
+	EDITOR="vim"; export EDITOR
+	VISUAL="$EDITOR"; export VISUAL
+	CDPATH='.:~:/usr/local/hms/hms2/:/usr/local/rnt/'; export CDPATH
+	# use vi mode for command history
+	#set -o vi
+	# allows Ctrl-S to be used for forward history searching
+	stty stop undef
+	# tell less to not clear the screen when user exits
+	LSVAR="`which ls` -liap"; export LSVAR
+	alias l="`which ls` -Apv"; export l
+	BLOCK_SIZE="'1"; export BLOCK_SIZE        #enable thousands grouping in ls and other commands
+	alias df='BLOCK_SIZE="" df'               #no thousands grouping in df
+	alias diff='LC_ALL=C TZ=GMT0 diff -Naur'  #normalize diffs for distributing
+	alias lynx='lynx -force_html -width=$COLUMNS'
+	alias links='links -force-html'
+	alias head='head -n $((${LINES:-12}-2))'  #as many as possible w/o scrolling
+	alias tail='tail -n $((${LINES:-12}-2))'  #ditto
+	alias whois="whois -h whois.crsnic.net -H $1 --verbose"
+	set bell-style visible
+	shopt -s histverify						   #let me verify hist cmds before exec'ing (ex: !vi)
+	bind '"\e[A":history-search-backward'      #on cmd line, start typing then press up arrow to complete command
+	alias ..="cd .."
+	alias ...="cd ../.."
+	alias -- --="cd -"
+	alias connect='/usr/local/rnt/sbin/connect'
+	alias hms2='cd /usr/local/hms/hms2'
+	alias rnt='/usr/local/rnt'
+	alias vi='vim'
+	alias sftptab='printf "\e&&Bsftp-session `pwd`\n"' 
+	strerror() { python -c "import os; print os.strerror($1)"; }
+	alias hexdump='od -Ax -tx1z -v'
+
+	PYTHONPATH="/usr/local/hms/hms2/common/etc"; export PYTHONPATH
+	PATH=$PATH:/usr/local/bin:/bin:/usr/bin:/sbin:/usr/sbin:/usr/local/hms/hms2/common/bin:/usr/local/rnt/sbin; export PATH
+	PS1='\u@\h:\w\$ '; export PS1
+	alias l='ls -l'
+	alias gcc='/nfs/local/linux/gcc-4.2.2/bin/gcc'
+fi
+
