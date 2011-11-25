@@ -65,19 +65,20 @@ caption    always  "%{$_SCREEN_BG}$_SCREEN_CAPTION%=%n %t"
 hardstatus alwayslastline "%?%F%{$_SCREEN_FG}%:%{$_SCREEN_FG}%?%?%F%{$_SCREEN_BG}%? %L=%-Lw%45>%{$_SCREEN_BG}%n%f %t%{-}%+Lw%-0<"
 
 sorendition '= kG'	#green on black background
-escape ^Xx		#change escape key from Ctrl-A to Ctrl-!
+escape ^Xx		#change escape key from Ctrl-a to Ctrl-x
 
 # Banish screen 0, it sucks {{{
 bind "c" screen 1
 bind "^c" screen 1
 # user must enter 01 .. 40 to select the window
-maptimeout 425    #wait 400ms before executing. 
+maptimeout 425    #wait XXXms before executing. 
 				  #gives time for two char win selection. ex: "`18"
 bindkey "`0" mapdefault
 bindkey "`1" mapdefault
 bindkey "`2" mapdefault
 bindkey "`3" mapdefault
 bindkey "`4" mapdefault
+bindkey "`00" select 0
 bindkey "`01" select 1
 bindkey "`02" select 2
 bindkey "`03" select 3
