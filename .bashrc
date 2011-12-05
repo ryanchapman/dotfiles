@@ -5,8 +5,6 @@
 
 umask 022
 
-bind '"\e[A":history-search-backward'
-
 # -t 0 will return TRUE if the terminal is a pseudterminal
 [[ -r ~rchapman/.setup_env && -t 0 ]] && source ~rchapman/.setup_env
 
@@ -16,7 +14,7 @@ bind '"\e[A":history-search-backward'
 # User specific aliases and functions
 
 # remove aliases for some commands
-for i in {which,ls,more,sort,tail,head,ps,cd,git}
+for i in {which,ls,more,sort,tail,head,ps,cd}
 do
 	if [[ -n `alias|grep $i=` ]]; then unalias $i; fi
 done
@@ -31,24 +29,16 @@ fi
 
 alias more='less'; export more
 
-function fxn_git ()
-{
-    if [[ "$1" == "status" ]]; then 
-        git fetch
-        shift
-        git-status $*
-    fi
-}
-
 function fxn_su ()
 {
 	# set up env vars for root
 	sh ~/.setup_env root
-	su -m
+	su -m $*
 
 	# swap vars back to user mode
 	. ~/.setup_env
 }
+alias su='fxn_su'; export su
 
 export CVSROOT=/nfs/src/cvsroot
 #export JAVA_HOME=/nfs/local/linux/jdk/1.[5|6]/current

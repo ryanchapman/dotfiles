@@ -26,6 +26,13 @@ if [ -d ~rchapman ]; then
 	LSVAR="`which ls` -liap"; export LSVAR
 	alias l="`which ls` -Apv"; export l
 	BLOCK_SIZE="'1"; export BLOCK_SIZE        #enable thousands grouping in ls and other commands
+    if [[ $hostname =~ \.qa\.lan ]]; then
+        alias si="sudo /usr/local/rnt/sbin/connect dbqa03.int siteinfo"
+        export si
+    else
+        alias si="sudo /usr/local/rnt/sbin/connect `hostname` siteinfo"
+        export si
+    fi
 	alias df='BLOCK_SIZE="" df'               #no thousands grouping in df
 	alias diff='LC_ALL=C TZ=GMT0 diff -Naur'  #normalize diffs for distributing
 	alias lynx='lynx -force_html -width=$COLUMNS'
@@ -35,7 +42,7 @@ if [ -d ~rchapman ]; then
 	alias whois="whois -h whois.crsnic.net -H $1 --verbose"
 	set bell-style visible
 	shopt -s histverify						   #let me verify hist cmds before exec'ing (ex: !vi)
-	bind '"\e[A":history-search-backward'      #on cmd line, start typing then press up arrow to complete command
+	#bind '"\e[A":history-search-backward'      #on cmd line, start typing then press up arrow to complete command
 	alias ..="cd .."
 	alias ...="cd ../.."
 	alias -- --="cd -"
@@ -43,6 +50,7 @@ if [ -d ~rchapman ]; then
 	alias hms2='cd /usr/local/hms/hms2'
 	alias rnt='/usr/local/rnt'
 	alias vi='vim'
+    alias ssh='TERM=xterm ssh'
 	alias sftptab='printf "\e&&Bsftp-session `pwd`\n"' 
 	strerror() { python -c "import os; print os.strerror($1)"; }
 	alias hexdump='od -Ax -tx1z -v'
@@ -51,6 +59,41 @@ if [ -d ~rchapman ]; then
 	PATH=$PATH:/usr/local/bin:/bin:/usr/bin:/sbin:/usr/sbin:/usr/local/hms/hms2/common/bin:/usr/local/rnt/sbin; export PATH
 	PS1='\u@\h:\w\$ '; export PS1
 	alias l='ls -l'
-	alias gcc='/nfs/local/linux/gcc-4.2.2/bin/gcc'
+
+    # shelltitle for xterm/screen
+    function fxn_promptcmd () 
+    { 
+        if [[ "$TERM" =~ screen ]]; then
+            if [[ `id -un` == root ]]; then SEP='#'; else SEP='$'; fi
+            echo -ne "\ek${HOSTNAME/\.*/}${SEP}bash\e\\"
+        fi
+    }
+    # PROMPT_COMMAND is executed before the prompt is displayed, so we'll change shelltitle to
+    # "@host$bash" (logged in as non-root) or "@host#bash" (logged in as root)
+    PROMPT_COMMAND='fxn_promptcmd'
+    # the trap is used to change the shelltitle when a command is running
+    function fxn_cmdrunning () 
+    {
+        if [[ `id -un` == root ]]; then SEP='#'; else SEP='$'; fi
+        OLD_HISTTIMEFORMAT=$HISTTIMEFORMAT
+        unset HISTTIMEFORMAT
+        # hackery to grab the hostname if the last command executed was ssh
+        LAST_HIST_ENTRY=$(history 1)
+        LAST_CMD=$(echo "$LAST_HIST_ENTRY" | sed 's/^\s*[0-9]*\s*//' | cut -f1 -d' ') 
+        echo "`date`  LAST_CMD=$LAST_CMD" >>/tmp/tt4
+        if [[ $LAST_CMD == ssh ]]; then
+        # ssh to remote box.  There is no way to determine what command is running on a remote box
+            HOST=$(echo "$LAST_HIST_ENTRY" | sed 's/^\s*[0-9]*\s*//' | cut -f2 -d' ')
+            echo -ne "\ek${HOST/\.*/}${SEP}bash\e\\"
+        else
+            # command was executed locally
+            HOST=$(hostname)
+            echo -ne "\ek${HOST/\.*/}${SEP}${BASH_COMMAND/ */}\e\\"
+        fi
+        HISTTIMEFORMAT=$OLD_HISTTIMEFORMAT
+    }
+    if [[ "$TERM" =~ screen ]]; then 
+        trap 'fxn_cmdrunning' DEBUG
+    fi
 fi
 
