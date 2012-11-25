@@ -15,13 +15,13 @@ defshell -$SHELL  #dash makes it a login shell
 defscrollback 10000
 defutf8 on        #always use UTF-8
 #defflow off       #turn off flow control
-msgwait 5         #display messages for N seconds
+msgwait 3         #display messages for N seconds
 #defbce on         #erase background with curent bg color
 #setenv LC_CTYPE en_us.UTF-8   #probably not needed
 setenv PS1 "\u@\h:\w\$ "
 
 #TODO2 Login off not working
-shelltitle '|hms'  #default title for windows created with C-a,c
+shelltitle '$ |bash'  #default title for windows created with C-a,c
                    #note that "|TITLE" syntax is required.  Only TITLE 
                    #is displayed
 
@@ -52,16 +52,22 @@ defbce "on"       #needed for 256 color terminal?
 ### APPEARANCE ###
 #caption	always	"%{+b yk}LC"
 #echo "TERM=$TERM"   #can be used for debugging. echoes to term before screen starts
-#change X to the color for the POD.  
-#For example, yellow would be x=y U=uppercase(x)=Y
-#caption always "%{+b XU}"  or "%{+b yY}
-# OLD - hardstatus alwayslastline "%?%{wK}%-Lw%?%{+b yY}%n*%f %t%?(%u)%?%?%{wK}%+Lw%?K"
 
+# DEFAULTS
+setenv _SCREEN_CAPTION "$HOSTNAME "
+setenv _SCREEN_BG "=b rW"
+setenv _SCREEN_FG "wK"
+#setenv _SCREEN_BG "mW"
+#setenv _SCREEN_FG "wK"
+screen -t bash     1 bash
+screen -t bash     2 bash
+
+# Host specific settings
 source $HOME/.screenrc.$HOSTNAME
 
-sessionname $HOSTNAME
+sessionname "$HOSTNAME "
 
-caption    always  "%{$_SCREEN_BG}$_SCREEN_CAPTION%=%n %t"
+caption    always  "%{$_SCREEN_BG}$_SCREEN_CAPTION%=%l"
 hardstatus alwayslastline "%?%F%{$_SCREEN_FG}%:%{$_SCREEN_FG}%?%?%F%{$_SCREEN_BG}%? %L=%-Lw%45>%{$_SCREEN_BG}%n%f %t%{-}%+Lw%-0<"
 
 sorendition '= kG'	#green on black background
