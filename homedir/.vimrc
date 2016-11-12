@@ -18,9 +18,6 @@ endif
 " |   ,b = fuzzy find in all buffers                                          |
 " |   ,p = go to previous file                                                |
 " |                                                                           |
-" |   hh = inserts '=>'                                                       |
-" |   aa = inserts '@'                                                        |
-" |                                                                           |
 " |   ,h = new horizontal window                                              |
 " |   ,v = new vertical window                                                |
 " |                                                                           |
@@ -197,12 +194,6 @@ autocmd FileType php set omnifunc=phpcomplete#CompletePHP
 autocmd FileType c set omnifunc=ccomplete#Complete
 " May require ruby compiled in
 autocmd FileType ruby,eruby set omnifunc=rubycomplete#Complete 
-
-
-" Hard to type *****************************************************************
-imap uu _
-imap hh =>
-imap aa @
 
 
 " -----------------------------------------------------------------------------  
