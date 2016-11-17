@@ -40,6 +40,13 @@ function fxn_su ()
 }
 alias su='fxn_su'; export su
 
+function settitle () 
+{ 
+    echo -ne "\033]0;${1}\007"
+    echo
+}
+export settitle
+
 export CVSROOT=/nfs/src/cvsroot
 #export JAVA_HOME=/nfs/local/linux/jdk/1.[5|6]/current
 
