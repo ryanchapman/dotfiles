@@ -91,14 +91,20 @@ function all
         logit "Checking if we need to install pip: no"
     fi
 
-    logit "Installing powerline"
-    run "pip install --user git+git://github.com/powerline/powerline"
-    logit "Installing powerline: done"
+    logit "Checking if we need to install powerline"
+    if ! which powerline &>/dev/null; then
+        logit "Checking if we need to install powerline: yes"
+        logit "Installing powerline"
+        run "pip install --user git+git://github.com/powerline/powerline"
+        logit "Installing powerline: done"
 
-    logit "Installing powerline fonts"
-    local tmpdir=$(mkdir /tmp/XXXXX)
-    run "(cd ${tmpdir} && git clone https://github.com/powerline/fonts.git && cd fonts && ./install.sh)"
-    logit "Installing powerline fonts: done"
+        logit "Installing powerline fonts"
+        local tmpdir=$(mkdir /tmp/XXXXX)
+        run "(cd ${tmpdir} && git clone https://github.com/powerline/fonts.git && cd fonts && ./install.sh)"
+        logit "Installing powerline fonts: done"
+    else
+        logit "Checking if we need to install powerline: no"
+    fi
 
 }
 
