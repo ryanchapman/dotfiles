@@ -1,0 +1,12 @@
+[user]
+	name = Ryan A. Chapman
+	email = ryan@rchapman.org
+[push]
+	default = simple
+[alias]
+	br = branch
+	co = checkout
+    d = diff
+    pul = pull
+    pus = push
+	s = status
