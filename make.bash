@@ -98,6 +98,10 @@ function all
         run "pip install --user git+git://github.com/powerline/powerline"
         logit "Installing powerline: done"
 
+        logit "Installing powerline-gitstatus"
+        run "pip install powerline-gitstatus"
+        logit "Installing powerline-gitstatus: done"
+
         logit "Installing powerline fonts"
         local tmpdir=$(mkdir /tmp/XXXXX)
         run "(cd ${tmpdir} && git clone https://github.com/powerline/fonts.git && cd fonts && ./install.sh)"
