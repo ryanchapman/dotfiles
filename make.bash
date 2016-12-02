@@ -72,8 +72,34 @@ function all
     logit "Looking for your home directory: done"
      
     logit "Copying dotfiles into $homedir"
-    rsync -avxW homedir/ $homedir
+    run "rsync -avxW homedir/ $homedir"
     logit "Copying dotfiles into $homedir: done"
+
+    logit "Making sure \"source ~/.bashrc\" is in ~/.bash_profile"
+    if ! grep 'source ~/.bashrc' ~/.bash_profile; then
+        run "echo 'source ~/.bashrc' >> ~/.bash_profile"
+    fi
+    logit "Making sure \"source ~/.bashrc\" is in ~/.bash_profile: done"
+
+    logit "Checking if we need to install pip"
+    if ! which pip &>/dev/null; then
+        logit "Checking if we need to install pip: yes"
+        logit "Installing pip"
+        run "brew install pip"
+        logit "Installing pip: done"
+    else
+        logit "Checking if we need to install pip: no"
+    fi
+
+    logit "Installing powerline"
+    run "pip install --user git+git://github.com/powerline/powerline"
+    logit "Installing powerline: done"
+
+    logit "Installing powerline fonts"
+    local tmpdir=$(mkdir /tmp/XXXXX)
+    run "(cd ${tmpdir} && git clone https://github.com/powerline/fonts.git && cd fonts && ./install.sh)"
+    logit "Installing powerline fonts: done"
+
 }
 
 #################################
