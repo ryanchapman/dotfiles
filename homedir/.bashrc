@@ -42,6 +42,9 @@ function settitle ()
 }
 export settitle
 
+# fixes `gpg: problem with the agent: Inappropriate ioctl for device`
+export GPG_TTY=`tty`
+
 export POWERLINE_CONFIG_COMMAND=~/Library/Python/2.7/bin/powerline-config
 export POWERLINE_COMMAND=powerline
 export PATH=$PATH:~/Library/Python/2.7/bin/
