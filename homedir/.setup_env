@@ -39,7 +39,6 @@ if [ -d ~rchapman ]; then
 	alias links='links -force-html'
 	alias head='head -n $((${LINES:-12}-2))'  #as many as possible w/o scrolling
 	alias tail='tail -n $((${LINES:-12}-2))'  #ditto
-	alias whois="whois -h whois.crsnic.net -H $1 --verbose"
 	set bell-style visible
 	shopt -s histverify						   #let me verify hist cmds before exec'ing (ex: !vi)
 	#bind '"\e[A":history-search-backward'      #on cmd line, start typing then press up arrow to complete command
