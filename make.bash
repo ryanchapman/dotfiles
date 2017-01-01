@@ -70,7 +70,13 @@ function all
     fi
     logit "homedir=$homedir"
     logit "Looking for your home directory: done"
-     
+    
+    # to any hackers out there... no, I don't keep my ssh keys on disk. They are on a removable security token, so hacking
+    # my dropbox account won't get you the keys
+    logit "Setting up symlink from ~/Dropbox/.ssh -> ~/.ssh"
+    run "ln -s ~/Dropbox/.ssh ~/.ssh"
+    logit "Setting up symlink from ~/Dropbox/.ssh -> ~/.ssh: done"
+
     logit "Copying dotfiles into $homedir"
     run "rsync -avxW homedir/ $homedir"
     logit "Copying dotfiles into $homedir: done"
