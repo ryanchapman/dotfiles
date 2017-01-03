@@ -73,9 +73,9 @@ function all
     
     # to any hackers out there... no, I don't keep my ssh keys on disk. They are on a removable security token, so hacking
     # my dropbox account won't get you the keys
-    logit "Setting up symlink from ~/Dropbox/.ssh -> ~/.ssh"
-    run "ln -s ~/Dropbox/.ssh ~/.ssh"
-    logit "Setting up symlink from ~/Dropbox/.ssh -> ~/.ssh: done"
+    logit "Setting up symlink from ~/Dropbox/.ssh/config -> ~/.ssh/config"
+    run "ln -s ~/Dropbox/.ssh/config ~/.ssh/config"
+    logit "Setting up symlink from ~/Dropbox/.ssh/config -> ~/.ssh/config: done"
 
     logit "Copying dotfiles into $homedir"
     run "rsync -avxW homedir/ $homedir"
