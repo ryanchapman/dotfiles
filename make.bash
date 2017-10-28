@@ -73,9 +73,9 @@ function all
     
     # to any hackers out there... no, I don't keep my ssh keys on disk. They are on a removable security token, so hacking
     # my dropbox account won't get you the keys
-    logit "Setting up symlink from ~/Dropbox/.ssh/config -> ~/.ssh/config"
-    run "ln -s ~/Dropbox/.ssh/config ~/.ssh/config"
-    logit "Setting up symlink from ~/Dropbox/.ssh/config -> ~/.ssh/config: done"
+    logit "Setting up symlink from ~/Dropbox/.ssh -> ~/.ssh"
+    run "ln -s ~/Dropbox/.ssh ~/.ssh"
+    logit "Setting up symlink from ~/Dropbox/.ssh -> ~/.ssh: done"
 
     logit "Copying dotfiles into $homedir"
     run "rsync -avxW homedir/ $homedir"
@@ -87,25 +87,55 @@ function all
     fi
     logit "Making sure \"source ~/.bashrc\" is in ~/.bash_profile: done"
 
-    logit "Checking if we need to install pip"
-    if ! which pip &>/dev/null; then
-        logit "Checking if we need to install pip: yes"
-        logit "Installing pip"
-        run "brew install pip"
-        logit "Installing pip: done"
+    logit "Checking if we need to install pip2"
+    if ! which pip2 &>/dev/null; then
+        logit "Checking if we need to install pip2: yes"
+        logit "Installing python and pip2"
+        run "brew install python"
+        logit "Installing python and pip2: done"
     else
-        logit "Checking if we need to install pip: no"
+        logit "Checking if we need to install pip2: no"
+    fi
+
+    logit "Checking if we need to install bash"
+    if [[ "$(which bash)" != "/usr/local/bin/bash" ]]; then
+        logit "Checking if we need to install bash: yes"
+        logit "Installing bash"
+        run "brew install bash"
+        logit "Installing bash: done"
+    else
+        logit "Checking if we need to install bash: no"
+    fi
+
+    logit "Checking if we need to add /usr/local/bin/bash to /etc/shells"
+    if ! grep /usr/local/bin/bash /etc/shells; then
+        logit "Checking if we need to add /usr/local/bin/bash to /etc/shells: yes"
+        logit "Adding shell /usr/local/bin/bash to /etc/shells"
+        run "sudo bash -c 'echo /usr/local/bin/bash >> /etc/shells'"
+        logit "Adding shell /usr/local/bin/bash to /etc/shells: done"
+    else
+        logit "Checking if we need to add /usr/local/bin/bash to /etc/shells: no"
+    fi
+
+    logit "Checking if we need to change our shell to /usr/local/bin/bash"
+    if ! dscl . -read "/Users/$USER" | grep ^UserShell: | grep /usr/local/bin/bash; then
+        logit "Checking if we need to change our shell to /usr/local/bin/bash: yes"
+        logit "Changing shell for $USER to /usr/local/bin/bash"
+        chsh -s /usr/local/bin/bash
+        logit "Changing shell for $USER to /usr/local/bin/bash: done"
+    else
+        logit "Checking if we need to change our shell to /usr/local/bin/bash: no"
     fi
 
     logit "Checking if we need to install powerline"
     if ! which powerline &>/dev/null; then
         logit "Checking if we need to install powerline: yes"
         logit "Installing powerline"
-        run "pip install --user git+git://github.com/powerline/powerline"
+        run "pip2 install --user git+git://github.com/powerline/powerline"
         logit "Installing powerline: done"
 
         logit "Installing powerline-gitstatus"
-        run "pip install powerline-gitstatus"
+        run "pip2 install powerline-gitstatus"
         logit "Installing powerline-gitstatus: done"
 
         logit "Installing powerline fonts"
