@@ -49,4 +49,4 @@ export POWERLINE_CONFIG_COMMAND=~/Library/Python/2.7/bin/powerline-config
 export POWERLINE_COMMAND=powerline
 export PATH=$PATH:~/Library/Python/2.7/bin/
 source ~/Library/Python/2.7/lib/python/site-packages/powerline/bindings/bash/powerline.sh
-
+alias aws_mfa="python -c 'from opinel.utils.credentials import read_creds; read_creds(\"default\", force_init=True)'"; export aws_mfa
